@@ -1,0 +1,130 @@
+{
+  "entities": {
+    "Lead": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Lead",
+      "type": "object",
+      "description": "Represents a potential client who has submitted their information through the landing page.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the lead."
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of the lead."
+        },
+        "email": {
+          "type": "string",
+          "description": "The email address of the lead.",
+          "format": "email"
+        },
+        "phone": {
+          "type": "string",
+          "description": "The phone number of the lead."
+        },
+        "message": {
+          "type": "string",
+          "description": "The message or inquiry submitted by the lead."
+        },
+        "submissionDate": {
+          "type": "string",
+          "description": "The date and time the lead submitted their information.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "email",
+        "submissionDate"
+      ]
+    },
+    "CaseStudy": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "CaseStudy",
+      "type": "object",
+      "description": "Represents a successful e-commerce project with quantifiable results.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the case study."
+        },
+        "title": {
+          "type": "string",
+          "description": "The title of the case study."
+        },
+        "description": {
+          "type": "string",
+          "description": "A brief overview of the project and the client's goals."
+        },
+        "results": {
+          "type": "string",
+          "description": "Quantifiable results achieved in the project."
+        },
+        "imageUrl": {
+          "type": "string",
+          "description": "URL of the image associated with the case study."
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "description",
+        "results"
+      ]
+    },
+    "Testimonial": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Testimonial",
+      "type": "object",
+      "description": "Represents a quote from a satisfied client.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the testimonial."
+        },
+        "author": {
+          "type": "string",
+          "description": "The name of the client giving the testimonial."
+        },
+        "quote": {
+          "type": "string",
+          "description": "The actual testimonial quote."
+        },
+        "authorTitle": {
+          "type": "string",
+          "description": "The title of the client giving the testimonial."
+        }
+      },
+      "required": [
+        "id",
+        "author",
+        "quote"
+      ]
+    }
+  },
+  "auth": {
+    "providers": [
+      "google.com"
+    ]
+  },
+  "firestore": {
+    "/leads/{leadId}": {
+      "schema": "Lead",
+      "description": "Collection for storing leads submitted through the landing page."
+    },
+    "/case_studies/{caseStudyId}": {
+      "schema": "CaseStudy",
+      "description": "Collection for storing case studies. Publicly readable, admin-only management."
+    },
+    "/testimonials/{testimonialId}": {
+      "schema": "Testimonial",
+      "description": "Collection for storing testimonials. Publicly readable, admin-only management."
+    },
+    "/roles_admin/{uid}": {
+      "schema": "object",
+      "description": "Collection used to store admin roles. The existence of a document in this collection grants admin privileges."
+    }
+  }
+}

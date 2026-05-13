@@ -1,0 +1,89 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // 0. Global Safety Net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // 1. Leads Collection
+    // Public creation allowed, admin-only management.
+    match /leads/{leadId} {
+      allow get: if isAdmin();
+      allow list: if isAdmin();
+      allow create: if isValidId(leadId) && isValidLead(incoming());
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // 2. Case Studies Collection
+    // Public reading allowed, admin-only management.
+    match /case_studies/{caseStudyId} {
+      allow get, list: if true;
+      allow create: if isAdmin() && isValidId(caseStudyId);
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // 3. Testimonials Collection
+    // Public reading allowed, admin-only management.
+    match /testimonials/{testimonialId} {
+      allow get, list: if true;
+      allow create: if isAdmin() && isValidId(testimonialId);
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // 4. Admin Roles Collection
+    // Only admins can see and manage admin roles.
+    match /roles_admin/{uid} {
+      allow get: if isSignedIn() && (request.auth.uid == uid || isAdmin());
+      allow list: if isAdmin();
+      allow create: if isAdmin() && isValidId(uid);
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // ------- Helpers -------
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    /**
+     * Checks if the user has an entry in the roles_admin collection.
+     * Note: This is the ONLY trusted source of admin privileges.
+     */
+    function isAdmin() {
+      return isSignedIn() && exists(/databases/$(database)/documents/roles_admin/$(request.auth.uid));
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+    
+    function existing() {
+      return resource.data;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    /**
+     * Strict validation for Lead documents.
+     */
+    function isValidLead(data) {
+      return data.keys().hasAll(['name', 'email', 'phone', 'message', 'submissionDate'])
+        && data.keys().size() == 5
+        && data.name is string && data.name.size() > 0 && data.name.size() <= 100
+        && data.email is string && data.email.size() > 0 && data.email.size() <= 100
+        && data.email.matches('^[^@]+@[^@]+\\.[^@]+$')
+        && (data.get('phone', '') is string && data.get('phone', '').size() <= 30)
+        && (data.get('message', '') is string && data.get('message', '').size() <= 2000)
+        // submissionDate MUST be a server timestamp
+        && data.submissionDate == request.time;
+    }
+  }
+}
