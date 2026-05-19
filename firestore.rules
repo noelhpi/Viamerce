@@ -7,6 +7,11 @@ service cloud.firestore {
       allow read, write: if false;
     }
 
+    // Connection Test
+    match /test/{documentId} {
+      allow get: if true;
+    }
+
     // 1. Leads Collection
     // Public creation allowed, admin-only management.
     match /leads/{leadId} {
@@ -61,10 +66,6 @@ service cloud.firestore {
 
     function incoming() {
       return request.resource.data;
-    }
-    
-    function existing() {
-      return resource.data;
     }
 
     function isValidId(id) {
