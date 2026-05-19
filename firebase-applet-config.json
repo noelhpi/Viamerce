@@ -1,10 +1,10 @@
 {
-  "projectId": "gen-lang-client-0721216660",
-  "appId": "1:77003068633:web:d2a1fe2236245828379ac8",
-  "apiKey": "AIzaSyAQRaZuJJV9ejSXiR8cMZwEKtwA_aEy_N0",
-  "authDomain": "gen-lang-client-0721216660.firebaseapp.com",
+  "projectId": "viamerce-d3bbd",
+  "appId": "1:530707635085:web:15a09486a39d43c9507bc4",
+  "apiKey": "AIzaSyAtTCWL2l1khAVsQdNpIIW-VmcmxMUbYFk",
+  "authDomain": "viamerce-d3bbd.firebaseapp.com",
   "firestoreDatabaseId": "(default)",
-  "storageBucket": "gen-lang-client-0721216660.firebasestorage.app",
-  "messagingSenderId": "77003068633",
+  "storageBucket": "viamerce-d3bbd.firebasestorage.app",
+  "messagingSenderId": "530707635085",
   "measurementId": ""
 }

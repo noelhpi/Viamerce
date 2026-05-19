@@ -90,11 +90,13 @@
     z-index: 0;
   }
 
-  .card-glow:hover::before {
+  .card-glow:hover::before,
+  .card-glow.glow-active::before {
     opacity: 1;
   }
 
-  .card-glow:hover {
+  .card-glow:hover,
+  .card-glow.glow-active {
     border-color: var(--hover-border, rgba(0,217,255,0.5));
     box-shadow: 0 20px 40px var(--glow-color, rgba(0,217,255,0.2));
     transform: translateY(-6px);
